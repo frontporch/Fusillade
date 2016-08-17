@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using System.Text;
@@ -44,7 +43,7 @@ namespace Fusillade
     {
         readonly int priority;
         readonly OperationQueue opQueue;
-        readonly Dictionary<string, InflightRequest> inflightResponses = 
+        readonly Dictionary<string, InflightRequest> inflightResponses =
             new Dictionary<string, InflightRequest>();
 
         readonly Func<HttpRequestMessage, HttpResponseMessage, string, CancellationToken, Task> cacheResult;
@@ -74,7 +73,7 @@ namespace Fusillade
 
             var key = UniqueKeyForRequest(request);
             var realToken = new CancellationTokenSource();
-            var ret = new InflightRequest(() => { 
+            var ret = new InflightRequest(() => {
                 lock (inflightResponses) inflightResponses.Remove(key);
                 realToken.Cancel();
             });
@@ -158,7 +157,7 @@ namespace Fusillade
     {
         public static string ConcatenateAll<T>(this IEnumerable<T> This, Func<T, string> selector, char separator = '|')
         {
-            return This.Aggregate(new StringBuilder(), (acc, x) => 
+            return This.Aggregate(new StringBuilder(), (acc, x) =>
             {
                 acc.Append(selector(x));
                 acc.Append(separator);
